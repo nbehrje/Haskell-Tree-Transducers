@@ -11,3 +11,7 @@
 
 > children :: Tree a -> [Tree a]
 > children (Node _ ts) = ts
+
+> yield :: Tree a -> [a]
+> yield (Node t []) = [t]
+> yield (Node t ts) = concatMap yield ts
