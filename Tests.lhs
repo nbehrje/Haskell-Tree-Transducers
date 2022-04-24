@@ -3,17 +3,33 @@
 > |-}
 
 > import Trees
+> import Transducer
 
 == Subject only ==
+
+> subjTT = TT {
+>         states = ["qNP", "qWP"]
+>       , sigma = ["the dog"]
+>       , finals = ["NP"]
+>       , delta = dSubj
+> }
+
+> dSubj [] "the dog" = [("qNoun", "the dog", []), ("qWhat", "what", [])]
+> dSubj [] "is" = [("qBe", "is", [])]
+> dSubj [] "big" = [("qAdjective", "big", [])]
+> dSubj ["qNoun"] "NP" = [("qNP", "NP", [0])]
+> dSubj ["qBe"] "AUX" = [("qAUX", "AUX", [0])]
+> dSubj ["qAdjective"] "ADJ" = [("qADJ", "ADJ", [0])]
+> dSubj ["qAUX", "qADJ"] "VP" = [("qVP", "VP", [0, 1])]
+> dSubj ["qNP", "qVP"] "S" = [("qS", "S", [0, 1])]
+> dSubj _ _ = []
 
 The dog is big.
 What is big?
 
 > test1In = Node "S" [
 >                    Node "NP" [
->                        Node "N" [
->                            Node "the dog" []
->                        ]
+>                        Node "the dog" []
 >                    ],
 >                    Node "VP" [
 >                        Node "AUX" [
@@ -44,9 +60,7 @@ What are big?
 
 > test2In = Node "S" [
 >                    Node "NP" [
->                        Node "N" [
->                            Node "the dogs" []
->                        ]
+>                        Node "the dogs" []
 >                    ],
 >                    Node "VP" [
 >                        Node "AUX" [
@@ -77,9 +91,7 @@ What is big?
 
 > test3In = Node "S" [
 >                    Node "NP" [
->                        Node "N" [
->                            Node "I" []
->                        ]
+>                        Node "I" []
 >                    ],
 >                    Node "VP" [
 >                        Node "AUX" [
@@ -110,9 +122,7 @@ What runs?
 
 > test4In = Node "S" [
 >                    Node "NP" [
->                        Node "N" [
->                            Node "the dog" []
->                        ]
+>                        Node "the dog" []
 >                    ],
 >                    Node "VP" [
 >                        Node "V" [
@@ -137,9 +147,7 @@ What are running?
 
 > test5In = Node "S" [
 >                    Node "NP" [
->                        Node "N" [
->                            Node "the dog" []
->                        ]
+>                        Node "the dog" []
 >                    ],
 >                    Node "VP" [
 >                        Node "AUX" [
