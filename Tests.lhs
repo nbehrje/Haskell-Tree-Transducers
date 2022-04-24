@@ -9,7 +9,7 @@
 
 == Subject only ==
 
-> testSubj = runTests subjTT [(test1In, test1Out)]
+> testSubj = runTests subjTT [(test1In, test1Out),(test2In,test2Out),(test3In,test3Out),(test4In,test4Out),(test5In,test5Out)]
 
 > subjTT = TT {
 >         states = ["qNP", "qWP"]
@@ -25,10 +25,16 @@
 > dSubj [] "are" = [("qBe", "are", [])]
 > dSubj [] "am" = [("qBe", "is", [])]
 > dSubj [] "big" = [("qAdjective", "big", [])]
+> dSubj [] "runs" = [("qVerb", "runs", [])]
+> dSubj [] "run" = [("qVerb", "run", [])]
+> dSubj [] "running" = [("qVerb", "running", [])]
 > dSubj ["qNoun"] "NP" = [("qNP", "NP", [0])]
 > dSubj ["qWhat"] "NP" = [("qNPWh", "NP", [0])]
 > dSubj ["qBe"] "AUX" = [("qAUX", "AUX", [0])]
 > dSubj ["qAdjective"] "ADJ" = [("qADJ", "ADJ", [0])]
+> dSubj ["qVerb"] "V" = [("qV", "V", [0])]
+> dSubj ["qV"] "VP" = [("qVP", "VP", [0])]
+> dSubj ["qAUX", "qV"] "VP" = [("qVP", "VP", [0,1])]
 > dSubj ["qAUX", "qADJ"] "VP" = [("qVP", "VP", [0, 1])]
 > dSubj ["qNPWh", "qVP"] "S" = [("qSWh", "S", [0, 1])]
 > dSubj _ _ = [("undef","undef",[-1])]
@@ -81,8 +87,8 @@ What are big?
 >                    ]
 >   ]
 
-> test2Out = Node "S" [
->                   Node "WP" [
+> test2Out = [Node "S" [
+>                   Node "NP" [
 >                       Node "what" []
 >                   ],
 >                   Node "VP" [
@@ -93,7 +99,7 @@ What are big?
 >                            Node "big" []
 >                        ]
 >                   ]
->   ]
+>   ]]
 
 I am big.
 What is big?
@@ -112,8 +118,8 @@ What is big?
 >                    ]
 >   ]
 
-> test3Out = Node "S" [
->                   Node "WP" [
+> test3Out = [Node "S" [
+>                   Node "NP" [
 >                       Node "what" []
 >                   ],
 >                   Node "VP" [
@@ -124,7 +130,7 @@ What is big?
 >                            Node "big" []
 >                        ]
 >                   ]
->   ]
+>   ]]
 
 The dog runs.
 What runs?
@@ -140,8 +146,8 @@ What runs?
 >                    ]
 >   ]
 
-> test4Out = Node "S" [
->                   Node "WP" [
+> test4Out = [Node "S" [
+>                   Node "NP" [
 >                       Node "what" []
 >                   ],
 >                   Node "VP" [
@@ -149,18 +155,18 @@ What runs?
 >                            Node "runs" []
 >                        ]
 >                   ]
->   ]
+>   ]]
 
 The dogs are running.
 What are running?
 
 > test5In = Node "S" [
 >                    Node "NP" [
->                        Node "the dog" []
+>                        Node "the dogs" []
 >                    ],
 >                    Node "VP" [
 >                        Node "AUX" [
->                            Node "is" []
+>                            Node "are" []
 >                        ],
 >                        Node "V" [
 >                            Node "running" []
@@ -168,16 +174,16 @@ What are running?
 >                    ]
 >   ]
 
-> test5Out = Node "S" [
->                   Node "WP" [
+> test5Out = [Node "S" [
+>                   Node "NP" [
 >                       Node "what" []
 >                   ],
 >                   Node "VP" [
 >                        Node "AUX" [
->                            Node "is" []
+>                            Node "are" []
 >                        ],
 >                        Node "V" [
 >                            Node "running" []
 >                        ]
 >                    ]
->   ]
+>   ]]
