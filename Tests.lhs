@@ -4,25 +4,34 @@
 
 > import Trees
 > import Transducer
+  
+> runTests tt tests = map (\(inTree, outTrees) -> transduce tt inTree == outTrees) tests
 
 == Subject only ==
+
+> testSubj = runTests subjTT [(test1In, test1Out)]
 
 > subjTT = TT {
 >         states = ["qNP", "qWP"]
 >       , sigma = ["the dog"]
->       , finals = ["NP"]
+>       , finals = ["qSWh"]
 >       , delta = dSubj
 > }
 
 > dSubj [] "the dog" = [("qNoun", "the dog", []), ("qWhat", "what", [])]
+> dSubj [] "the dogs" = [("qNoun", "the dogs", []), ("qWhat", "what", [])]
+> dSubj [] "I" = [("qNoun", "I", []), ("qWhat", "what", [])]
 > dSubj [] "is" = [("qBe", "is", [])]
+> dSubj [] "are" = [("qBe", "are", [])]
+> dSubj [] "am" = [("qBe", "is", [])]
 > dSubj [] "big" = [("qAdjective", "big", [])]
 > dSubj ["qNoun"] "NP" = [("qNP", "NP", [0])]
+> dSubj ["qWhat"] "NP" = [("qNPWh", "NP", [0])]
 > dSubj ["qBe"] "AUX" = [("qAUX", "AUX", [0])]
 > dSubj ["qAdjective"] "ADJ" = [("qADJ", "ADJ", [0])]
 > dSubj ["qAUX", "qADJ"] "VP" = [("qVP", "VP", [0, 1])]
-> dSubj ["qNP", "qVP"] "S" = [("qS", "S", [0, 1])]
-> dSubj _ _ = []
+> dSubj ["qNPWh", "qVP"] "S" = [("qSWh", "S", [0, 1])]
+> dSubj _ _ = [("undef","undef",[-1])]
 
 The dog is big.
 What is big?
@@ -41,8 +50,8 @@ What is big?
 >                    ]
 >   ]
 
-> test1Out = Node "S" [
->                   Node "WP" [
+> test1Out = [Node "S" [
+>                   Node "NP" [
 >                       Node "what" []
 >                   ],
 >                   Node "VP" [
@@ -53,7 +62,7 @@ What is big?
 >                            Node "big" []
 >                        ]
 >                   ]
->   ]
+>   ]]
 
 The dogs are big.
 What are big?

@@ -18,6 +18,6 @@
 > yield (Node t []) = [t]
 > yield (Node t ts) = concatMap yield ts
 
-> fillVars :: Show a => [[Int]] -> [[Tree a]] -> [[Tree a]]
-> fillVars rootVars childrenProdTrees = map (\(idxs, trees) -> trees) zipped
->                                           where zipped = zip rootVars childrenProdTrees
+> fillVars :: [[Int]] -> [[Tree b]] -> [[Tree b]]
+> fillVars vars trees = map (\(idxs, trees) -> map (trees !!) idxs) zipped
+>                           where zipped = zip vars trees
