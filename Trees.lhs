@@ -28,7 +28,7 @@
 
 > tCP children = Node "CP" children
 > tC' children = Node "C'" children
-> tC children = Node "C" children
+> tC word = Node "C" [Node word []]
 > tTP children = Node "TP" children
 > tT' children = Node "T'" children
 > tT word = Node "T" [Node word []]
