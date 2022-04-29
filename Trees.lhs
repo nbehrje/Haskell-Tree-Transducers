@@ -25,3 +25,14 @@
 > isValid :: Tree a -> Bool
 > isValid (Node n ts) = True
 > isValid (VarIdx idx) = idx /= (-1)
+
+> tCP children = Node "CP" children
+> tC' children = Node "C'" children
+> tTP children = Node "TP" children
+> tS children =  Node "S" children
+> tNP children = Node "NP" children
+> tVP children = Node "VP" children
+> tV children = Node "V" children
+> tAUX children = Node "AUX" children
+> tADJ children = Node "ADJ" children
+> tLf word = Node word []
