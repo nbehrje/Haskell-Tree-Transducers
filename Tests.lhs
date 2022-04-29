@@ -18,26 +18,26 @@
 >       , delta = dSubj
 > }
 
-> dSubj [] "the dog" = [("qNoun", "the dog", []), ("qWhat", "what", [])]
-> dSubj [] "the dogs" = [("qNoun", "the dogs", []), ("qWhat", "what", [])]
-> dSubj [] "I" = [("qNoun", "I", []), ("qWhat", "what", [])]
-> dSubj [] "is" = [("qBe", "is", [])]
-> dSubj [] "are" = [("qBe", "are", [])]
-> dSubj [] "am" = [("qBe", "is", [])]
-> dSubj [] "big" = [("qAdjective", "big", [])]
-> dSubj [] "runs" = [("qVerb", "runs", [])]
-> dSubj [] "run" = [("qVerb", "run", [])]
-> dSubj [] "running" = [("qVerb", "running", [])]
-> dSubj ["qNoun"] "NP" = [("qNP", "NP", [0])]
-> dSubj ["qWhat"] "NP" = [("qNPWh", "NP", [0])]
-> dSubj ["qBe"] "AUX" = [("qAUX", "AUX", [0])]
-> dSubj ["qAdjective"] "ADJ" = [("qADJ", "ADJ", [0])]
-> dSubj ["qVerb"] "V" = [("qV", "V", [0])]
-> dSubj ["qV"] "VP" = [("qVP", "VP", [0])]
-> dSubj ["qAUX", "qV"] "VP" = [("qVP", "VP", [0,1])]
-> dSubj ["qAUX", "qADJ"] "VP" = [("qVP", "VP", [0, 1])]
-> dSubj ["qNPWh", "qVP"] "S" = [("qSWh", "S", [0, 1])]
-> dSubj _ _ = [("undef","undef",[-1])]
+> dSubj [] "the dog" = [("qNoun", Node "the dog" []), ("qWhat", Node "what" [])]
+> dSubj [] "the dogs" = [("qNoun", Node "the dogs" []), ("qWhat", Node "what" [])]
+> dSubj [] "I" = [("qNoun", Node "I" []), ("qWhat", Node "what" [])]
+> dSubj [] "is" = [("qBe", Node "is" [])]
+> dSubj [] "are" = [("qBe", Node "are" [])]
+> dSubj [] "am" = [("qBe", Node "is" [])]
+> dSubj [] "big" = [("qAdjective", Node "big" [])]
+> dSubj [] "runs" = [("qVerb", Node "runs" [])]
+> dSubj [] "run" = [("qVerb", Node "run" [])]
+> dSubj [] "running" = [("qVerb", Node "running" [])]
+> dSubj ["qNoun"] "NP" = [("qNP", Node "NP" [VarIdx 0])]
+> dSubj ["qWhat"] "NP" = [("qNPWh", Node "NP" [VarIdx 0])]
+> dSubj ["qBe"] "AUX" = [("qAUX", Node "AUX" [VarIdx 0])]
+> dSubj ["qAdjective"] "ADJ" = [("qADJ", Node "ADJ" [VarIdx 0])]
+> dSubj ["qVerb"] "V" = [("qV", Node "V" [VarIdx 0])]
+> dSubj ["qV"] "VP" = [("qVP", Node "VP" [VarIdx 0])]
+> dSubj ["qAUX", "qV"] "VP" = [("qVP", Node "VP" [VarIdx 0, VarIdx 1])]
+> dSubj ["qAUX", "qADJ"] "VP" = [("qVP", Node "VP" [VarIdx 0, VarIdx 1])]
+> dSubj ["qNPWh", "qVP"] "S" = [("qSWh", Node "S" [VarIdx 0, VarIdx 1])]
+> dSubj _ _ = [("undef", VarIdx (-1))]
 
 The dog is big.
 What is big?
@@ -187,3 +187,26 @@ What are running?
 >                        ]
 >                    ]
 >   ]]
+
+
+== Subject and Object ==
+
+The dog is an animal.
+What is the dog?
+What is an animal?
+
+The dogs are animals.
+What are the dogs?
+What are animals?
+
+The dog chases the cat.
+What does the dog chase?
+What chases the cat?
+
+The dogs chase the cats.
+What do the dogs chase?
+What chase the cat?
+
+The dogs are chasing the cats.
+What are chasing the cats?
+What are the dogs chasing?

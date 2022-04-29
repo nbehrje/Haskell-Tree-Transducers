@@ -6,7 +6,7 @@
 > import Debug.Trace
 > import Utils
 
-> data Tree a = Node a [Tree a] deriving (Eq, Ord, Show, Read)
+> data Tree a = Node a [Tree a] | VarIdx Int deriving (Eq, Ord, Show, Read)
 
 > root :: Tree a -> a
 > root (Node n _) = n
@@ -18,6 +18,10 @@
 > yield (Node t []) = [t]
 > yield (Node t ts) = concatMap yield ts
 
-> fillVars :: [[Int]] -> [[Tree b]] -> [[Tree b]]
-> fillVars vars trees = map (\(idxs, trees) -> map (trees !!) idxs) zipped
->                           where zipped = zip vars trees
+> fillVars :: Tree a -> [Tree a] -> Tree a
+> fillVars (Node n ts) trees = (Node n (map (\t -> fillVars t trees) ts))
+> fillVars (VarIdx idx) trees = trees !! idx
+
+> isValid :: Tree a -> Bool
+> isValid (Node n ts) = True
+> isValid (VarIdx idx) = idx /= (-1)

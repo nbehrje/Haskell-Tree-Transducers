@@ -11,22 +11,22 @@
 > data BFTT q b = TT { states :: [q]
 >                      , sigma  :: [b]
 >                      , finals :: [q]
->                      , delta  :: [q] -> b -> [(q, b, [Int])]}
+>                      , delta  :: [q] -> b -> [(q, Tree b)]}
 
 > process :: Show q => Show b => BFTT q b -> Tree b -> [(q, Tree b)]
-> process tt (Node n []) =  map (\(state, root, _) -> (state, Node root [])) (d [] n) 
+> process tt (Node n []) =  map (\(state, tree) -> (state, tree)) (d [] n) 
 >                             where d = delta tt
-> process tt (Node n ts) =  outTrees
+> process tt (Node n ts) =  outputs
 >                             where d = delta tt
 >                                   childrenProd = cartProd (map (process tt) ts)
 >                                   childrenStates = map (map fst) childrenProd
 >                                   childrenProdTrees = map (map snd) childrenProd
 >                                   rootOutputs = concat [d children n | children <- childrenStates]
->                                   valid = filter (\((_,_,vars),_) -> vars /= [-1]) (zip rootOutputs childrenProdTrees)
+>                                   valid = filter (isValid . snd . fst) (zip rootOutputs childrenProdTrees)
 >                                   (validRootOutputs, validChildTrees) = unzip valid
->                                   (validStates, validOuts, validVars) = unzip3 validRootOutputs
->                                   filledChildTrees = fillVars validVars validChildTrees
->                                   outTrees = map (\(state, root, children) -> (state, Node root children)) (zip3 validStates validOuts filledChildTrees)
+>                                   (validStates, validVarTrees) = unzip validRootOutputs
+>                                   filledChildTrees = map (uncurry fillVars) (zip validVarTrees validChildTrees)
+>                                   outputs = (zip validStates filledChildTrees)
 
 > transduce tt (Node n ts) = map snd  (process tt (Node n ts))
 >                               where f = finals tt
