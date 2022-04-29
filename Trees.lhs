@@ -28,11 +28,13 @@
 
 > tCP children = Node "CP" children
 > tC' children = Node "C'" children
+> tC children = Node "C" children
 > tTP children = Node "TP" children
-> tS children =  Node "S" children
+> tT' children = Node "T'" children
+> tT word = Node "T" [Node word []]
 > tNP children = Node "NP" children
 > tVP children = Node "VP" children
-> tV children = Node "V" children
-> tAUX children = Node "AUX" children
-> tADJ children = Node "ADJ" children
+> tV word = Node "V" [Node word []]
+> tADJ word = Node "ADJ" [Node word []]
 > tLf word = Node word []
+> tWhat = Node "NP" [Node "what" []]
