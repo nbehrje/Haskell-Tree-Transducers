@@ -9,7 +9,7 @@
 
 == Subject only ==
 
-> testSubj = runTests subjTT [(test1In, test1Out),(test2In,test2Out),(test3In,test3Out),(test4In,test4Out),(test5In,test5Out)]
+> testSubj = runTests subjTT [(test1In, test1Out),(test2In,test2Out),(test3In,test3Out),(test4In,test4Out)]
 
 > subjTT = TT {
 >         states = ["qNP", "qWP"]
@@ -25,28 +25,30 @@
 > dSubj [] "are" = [("qAre", Node "are" [])]
 > dSubj [] "am" = [("qIs", Node "is" [])]
 > dSubj [] "big" = [("qAdjective", Node "big" [])]
-> dSubj [] "runs" = [("qVerb", Node "runs" [])]
-> dSubj [] "run" = [("qVerb", Node "run" [])]
-> dSubj [] "running" = [("qVerb", Node "running" [])]
+> dSubj [] "runs" = [("qVerb_sing", Node "runs" [])]
+> dSubj [] "run" = [("qVerb_pl", Node "run" [])]
 > dSubj ["qNoun"] "NP" = [("qNP", Node "NP" [VarIdx 0])]
 > dSubj ["qWhat"] "NP" = [("qNPWh", Node "NP" [])]
 > dSubj ["qIs"] "T" = [("qT_is", Node "T" [])]
 > dSubj ["qAre"] "T" = [("qT_are", Node "T" [])]
 > dSubj ["qAdjective"] "ADJ" = [("qADJ", Node "ADJ" [VarIdx 0])]
-> dSubj ["qVerb"] "V" = [("qV", Node "V" [VarIdx 0])]
-> dSubj ["qV"] "VP" = [("qVP", Node "VP" [VarIdx 0])]
-> dSubj ["qVP"] "T'" = [("qT'_null", Node "T'" [VarIdx 0])]
+> dSubj ["qVerb_sing"] "V" = [("qV_sing", Node "V" [VarIdx 0])]
+> dSubj ["qVerb_pl"] "V" = [("qV_pl", Node "V" [VarIdx 0])]
+> dSubj ["qV_sing"] "VP" = [("qVP_sing", Node "VP" [VarIdx 0])]
+> dSubj ["qV_pl"] "VP" = [("qVP_pl", Node "VP" [VarIdx 0])]
+> dSubj ["qVP_sing"] "T'" = [("qT'_sing", Node "T'" [VarIdx 0])]
+> dSubj ["qVP_pl"] "T'" = [("qT'_pl", Node "T'" [VarIdx 0])]
 > dSubj ["qT_is", "qADJ"] "T'" = [("qT'_is", Node "T'" [VarIdx 1])]
 > dSubj ["qT_are", "qADJ"] "T'" = [("qT'_are", Node "T'" [VarIdx 1])]
-> dSubj ["qT_is", "qVP"] "T'" = [("qT'_is", Node "T'" [VarIdx 1])]
-> dSubj ["qT_are", "qVP"] "T'" = [("qT'_are", Node "T'" [VarIdx 1])]
 > dSubj ["qNPWh", "qT'_is"] "TP" = [("qTPWh_is", Node "TP" [VarIdx 1])]
 > dSubj ["qNPWh", "qT'_are"] "TP" = [("qTPWh_are", Node "TP" [VarIdx 1])]
 > dSubj ["qNPWh", "qT'_null"] "TP" = [("qTPWh_null", Node "TP" [VarIdx 1])]
+> dSubj ["qNPWh", "qT'_pl"] "TP" = [("qTPWh_null", Node "TP" [VarIdx 1])]
+> dSubj ["qNPWh", "qT'_sing"] "TP" = [("qTPWh_null", Node "TP" [VarIdx 1])]
 > dSubj ["qTPWh_is"] "C'" = [("qC'Wh", Node "C'" [tC "is", VarIdx 0])]
 > dSubj ["qTPWh_are"] "C'" = [("qC'Wh", Node "C'" [tC "are", VarIdx 0])]
 > dSubj ["qTPWh_null"] "C'" = [("qC'Wh", Node "C'" [VarIdx 0])]
-> dSubj ["qC'Wh"] "CP" = [("qCWh", Node "CP" [tWhat, VarIdx 0])]
+> dSubj ["qC'Wh"] "CP" = [("qCPWh", Node "CP" [tWhat, VarIdx 0])]
 > dSubj _ _ = [("undef", VarIdx (-1))]
 
 The dog is big.
@@ -77,17 +79,10 @@ What runs?
 
 > test4Out = [tCP [tWhat, tC' [tTP [tT' [tVP [tV "runs"]]]]]]
 
-The dogs are running.
-What are running?
-
-> test5In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tT "are", tVP [tV "running"]]]]]
-
-> test5Out = [tCP [tWhat, tC' [tC "are", tTP [tT' [tVP [tV "running"]]]]]]
-
 
 == Subject and Object ==
 
-> testSubjObj = runTests subjObjTT [(test6In, test6Out)]
+> testSubjObj = runTests subjObjTT [(test5In,test5Out),(test6In, test6Out),(test7In,test7Out),(test8In,test8Out)]
 
 > subjObjTT = TT {
 >         states = ["qNP", "qWP"]
@@ -97,31 +92,54 @@ What are running?
 > }
 
 > dSubjObj [] "an animal" = [("qNoun", Node "an animal" []), ("qWhat", Node "what" [])]
+> dSubjObj [] "animals" = [("qNoun", Node "animals" []), ("qWhat", Node "what" [])]
+> dSubjObj [] "the cat" = [("qNoun", Node "the cat" []), ("qWhat", Node "what" [])]
+> dSubjObj [] "chases" = [("qVerb_sing", Node "chases" [])]
+> dSubjObj [] "chase" = [("qVerb_pl", Node "chase" [])]
+> dSubjObj ["qV_sing", "qNP"] "VP"= [("qVP_sing", Node "VP" [VarIdx 0, VarIdx 1])]
+> dSubjObj ["qV_pl", "qNP"] "VP"= [("qVP_pl", Node "VP" [VarIdx 0, VarIdx 1])]
+> dSubjObj ["qV_sing", "qNPWh"] "VP"= [("qVPWh_sing", Node "VP" [VarIdx 0])]
+> dSubjObj ["qV_pl", "qNPWh"] "VP"= [("qVPWh_pl", Node "VP" [VarIdx 0])]
+> dSubjObj ["qVPWh_pl"] "T'" = [("qT'Wh_do", Node "T'" [VarIdx 0])]
 > dSubjObj ["qT_is","qNP"] "T'" = [("qT'_is", Node "T'" [VarIdx 1]),("qT'Wh_is", Node "T'" [])]
+> dSubjObj ["qT_are","qNP"] "T'" = [("qT'_are", Node "T'" [VarIdx 1]),("qT'Wh_are", Node "T'" [])]
 > dSubjObj ["qNP", "qT'Wh_is"] "TP" = [("qTPWh_is", Node "TP" [VarIdx 0])]
+> dSubjObj ["qNP", "qT'Wh_are"] "TP" = [("qTPWh_are", Node "TP" [VarIdx 0])]
+> dSubjObj ["qNP","qT'Wh_do"] "TP" = [("qTPWh_do", Node "TP" [VarIdx 0, VarIdx 1])]
+> dSubjObj ["qTPWh_do"] "C'" = [("qC'Wh", Node "C'" [tC "do", VarIdx 0])]
 > dSubjObj qs n = dSubj qs n
 
 The dog is an animal.
 What is the dog?
 What is an animal?
 
-> test6In = tCP [tC' [tTP [tNP [tLf "the dog"], tT' [tT "is", tNP [tLf "an animal"]]]]]
+> test5In = tCP [tC' [tTP [tNP [tLf "the dog"], tT' [tT "is", tNP [tLf "an animal"]]]]]
 
-> test6Out = [tCP [tWhat, tC' [tC "is", tTP [tNP [tLf "the dog"]]]],
+> test5Out = [tCP [tWhat, tC' [tC "is", tTP [tNP [tLf "the dog"]]]],
 >             tCP [tWhat, tC' [tC "is", tTP [tT' [tNP [tLf "an animal"]]]]]]
 
 The dogs are animals.
 What are the dogs?
 What are animals?
 
+> test6In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tT "are", tNP [tLf "animals"]]]]]
+
+> test6Out = [tCP [tWhat, tC' [tC "are", tTP [tNP [tLf "the dogs"]]]],
+>             tCP [tWhat, tC' [tC "are", tTP [tT' [tNP [tLf "animals"]]]]]]
+
 The dog chases the cat.
-What does the dog chase?
+X What does the dog chase?
 What chases the cat?
+
+> test7In = tCP [tC' [tTP [tNP [tLf "the dog"], tT' [tVP [tV "chases", tNP [tLf "the cat"]]]]]]
+
+> test7Out = [tCP [tWhat, tC' [tTP [tT' [tVP [tV "chases", tNP [tLf "the cat"]]]]]]]
 
 The dogs chase the cats.
 What do the dogs chase?
-What chase the cat?
+What chase the cats?
 
-The dogs are chasing the cats.
-What are chasing the cats?
-What are the dogs chasing?
+> test8In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tLf "the cat"]]]]]]
+
+> test8Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase"]]]]],
+>             tCP [tWhat, tC' [tTP [tT' [tVP [tV "chase", tNP [tLf "the cat"]]]]]]]
