@@ -38,3 +38,5 @@
 > tADJ word = Node "ADJ" [Node word []]
 > tLf word = Node word []
 > tWhat = Node "NP" [Node "what" []]
+> tPP children = Node "PP" children
+> tP word = Node "P" [Node word []]

@@ -143,3 +143,41 @@ What chase the cats?
 
 > test8Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase"]]]]],
 >             tCP [tWhat, tC' [tTP [tT' [tVP [tV "chase", tNP [tLf "the cat"]]]]]]]
+
+
+== Prepositional Phrases ==
+
+The dog is on the mat.
+What is on the mat?
+What is the dog on?
+
+> test9In = tCP [tC' [tTP [tNP [tLf "the dog"], tT' [tT "is", tPP [tP "on", tNP [tLf "the mat"]]]]]]
+
+> test9Out = [tCP [tWhat, tC' [tC "is", tTP [tT' [tPP [tP "on", tNP [tLf "the mat"]]]]]],
+>             tCP [tWhat, tC' [tC "is", tTP [tNP [tLf "the dog"], tT' [tPP [tP "on"]]]]]]
+
+The dogs are on the mats.
+What are the dogs on?
+What are on the mat?
+
+> test10In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tT "are", tPP [tP "on", tNP [tLf "the mats"]]]]]]
+
+> test10Out = [tCP [tWhat, tC' [tC "are", tTP [tT' [tPP [tP "on", tNP [tLf "the mats"]]]]]],
+>             tCP [tWhat, tC' [tC "are", tTP [tNP [tLf "the dogs"], tT' [tPP [tP "on"]]]]]]
+
+The dogs sit on the mat.
+What sit on the mat?
+What do the dogs sit on?
+
+> test11In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tVP [tV "sit", tPP [tP "on", tNP [tLf "the mat"]]]]]]]
+
+> test11Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "sit", tPP [tP "on"]]]]]],
+>              tCP [tWhat, tC' [tTP [tT' [tVP [tV "sit", tPP [tP "on", tNP [tLf "the mat"]]]]]]]]          
+
+The dog chases [the cat] [on the mat].
+What chases [the cat] [on the mat]?
+X What does the dog chase?
+
+> test12In = tCP [tC' [tTP [tNP [tLf "the dog"], tT' [tVP [tV "chases", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]
+
+> test12Out = [tCP [tWhat, tC' [tTP [tT' [tVP [tV "chases", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]]
