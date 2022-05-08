@@ -176,6 +176,7 @@ What chase the cats?
 > dPP ["qV_sing", "qNP", "qPP"] "VP" = [("qVP_sing", Node "VP" [VarIdx 0, VarIdx 1, VarIdx 2])]
 > dPP ["qV_pl", "qNP", "qPP"] "VP" = [("qVP_sing", Node "VP" [VarIdx 0, VarIdx 1, VarIdx 2])]
 > dPP ["qV_pl", "qNPWh", "qPP"] "VP" = [("qVPWh_pl", Node "VP" [VarIdx 0, VarIdx 2])]
+> dPP ["qV_pl", "qNP", "qPPWh"] "VP" = [("qVPWh_pl", Node "VP" [VarIdx 0, VarIdx 1, VarIdx 2])]
 > dPP qs n = dSubjObj qs n
 
 The dog is on the mat.
@@ -216,8 +217,10 @@ X What does the dog chase on the mat?
 The dogs chase [the cat] [on the mat].
 What chase [the cat] [on the mat]?
 What do the dogs chase on the mat?
+What do the dogs chase the cat on?
 
 > test13In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]
 
-> test13Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tPP [tP "on", tNP [tLf "the mat"]]]]]]],
->               tCP [tWhat, tC' [tTP [tT' [tVP [tV "chase", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]]
+> test13Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tLf "the cat"], tPP [tP "on"]]]]]],
+>              tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tPP [tP "on", tNP [tLf "the mat"]]]]]]],
+>              tCP [tWhat, tC' [tTP [tT' [tVP [tV "chase", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]]
