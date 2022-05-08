@@ -101,10 +101,12 @@ What runs?
 > dSubjObj ["qV_sing", "qNPWh"] "VP"= [("qVPWh_sing", Node "VP" [VarIdx 0])]
 > dSubjObj ["qV_pl", "qNPWh"] "VP"= [("qVPWh_pl", Node "VP" [VarIdx 0])]
 > dSubjObj ["qVPWh_pl"] "T'" = [("qT'Wh_do", Node "T'" [VarIdx 0])]
-> dSubjObj ["qT_is","qNP"] "T'" = [("qT'_is", Node "T'" [VarIdx 1]),("qT'Wh_is", Node "T'" [])]
-> dSubjObj ["qT_are","qNP"] "T'" = [("qT'_are", Node "T'" [VarIdx 1]),("qT'Wh_are", Node "T'" [])]
-> dSubjObj ["qNP", "qT'Wh_is"] "TP" = [("qTPWh_is", Node "TP" [VarIdx 0])]
-> dSubjObj ["qNP", "qT'Wh_are"] "TP" = [("qTPWh_are", Node "TP" [VarIdx 0])]
+> dSubjObj ["qT_is","qNP"] "T'" = [("qT'_is", Node "T'" [VarIdx 1])]
+> dSubjObj ["qT_is","qNPWh"] "T'" = [("qT'Wh_is", Node "T'" [])]
+> dSubjObj ["qT_are","qNP"] "T'" = [("qT'_are", Node "T'" [VarIdx 1])]
+> dSubjObj ["qT_are","qNPWh"] "T'" = [("qT'Wh_are", Node "T'" [])]
+> dSubjObj ["qNP", "qT'Wh_is"] "TP" = [("qTPWh_is", Node "TP" [VarIdx 0, VarIdx 1])]
+> dSubjObj ["qNP", "qT'Wh_are"] "TP" = [("qTPWh_are", Node "TP" [VarIdx 0, VarIdx 1])]
 > dSubjObj ["qNP","qT'Wh_do"] "TP" = [("qTPWh_do", Node "TP" [VarIdx 0, VarIdx 1])]
 > dSubjObj ["qTPWh_do"] "C'" = [("qC'Wh", Node "C'" [tC "do", VarIdx 0])]
 > dSubjObj qs n = dSubj qs n
@@ -115,7 +117,7 @@ What is an animal?
 
 > test5In = tCP [tC' [tTP [tNP [tLf "the dog"], tT' [tT "is", tNP [tLf "an animal"]]]]]
 
-> test5Out = [tCP [tWhat, tC' [tC "is", tTP [tNP [tLf "the dog"]]]],
+> test5Out = [tCP [tWhat, tC' [tC "is", tTP [tNP [tLf "the dog"], tT' []]]],
 >             tCP [tWhat, tC' [tC "is", tTP [tT' [tNP [tLf "an animal"]]]]]]
 
 The dogs are animals.
@@ -124,7 +126,7 @@ What are animals?
 
 > test6In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tT "are", tNP [tLf "animals"]]]]]
 
-> test6Out = [tCP [tWhat, tC' [tC "are", tTP [tNP [tLf "the dogs"]]]],
+> test6Out = [tCP [tWhat, tC' [tC "are", tTP [tNP [tLf "the dogs"], tT' []]]],
 >             tCP [tWhat, tC' [tC "are", tTP [tT' [tNP [tLf "animals"]]]]]]
 
 The dog chases the cat.
@@ -147,14 +149,43 @@ What chase the cats?
 
 == Prepositional Phrases ==
 
+> testPP = runTests ppTT [(test9In, test9Out),(test10In,test10Out),(test11In, test11Out),(test12In,test12Out),(test13In,test13Out)]
+
+> ppTT = TT {
+>         states = ["qNP", "qWP"]
+>       , sigma = ["the dog"]
+>       , finals = ["qCPWh"]
+>       , delta = dPP
+> }
+
+> dPP [] "the mat" = [("qNoun", Node "the mat" []), ("qWhat", Node "what" [])]
+> dPP [] "the mats" = [("qNoun", Node "the mats" []), ("qWhat", Node "what" [])]
+> dPP [] "on" = [("qPrep", Node "on" [])]
+> dPP [] "sit" = [("qVerb_pl", Node "sit" [])]
+> dPP ["qPrep"] "P" = [("qP", Node "P" [VarIdx 0])]
+> dPP ["qP", "qNP"] "PP" = [("qPP", Node "PP" [VarIdx 0, VarIdx 1])]
+> dPP ["qP", "qNPWh"] "PP" = [("qPPWh", Node "PP" [VarIdx 0])]
+> dPP ["qT_is", "qPP"] "T'" = [("qT'_is", Node "T'" [VarIdx 1])]
+> dPP ["qT_is", "qPPWh"] "T'" = [("qT'Wh_is", Node "T'" [VarIdx 1])]
+> dPP ["qT_are", "qPP"] "T'" = [("qT'_are", Node "T'" [VarIdx 1])]
+> dPP ["qT_are", "qPPWh"] "T'" = [("qT'Wh_are", Node "T'" [VarIdx 1])]
+> dPP ["qV_pl", "qPP"] "VP" = [("qVP_pl", Node "VP" [VarIdx 0, VarIdx 1])]
+> dPP ["qV_pl", "qPPWh"] "VP" = [("qVPWh_pl", Node "VP" [VarIdx 0, VarIdx 1])]
+> dPP ["qV_sing", "qPP"] "VP" = [("qVP_sing", Node "VP" [VarIdx 0, VarIdx 1])]
+> dPP ["qV_sing", "qPPWh"] "VP" = [("qVPWh_sing", Node "VP" [VarIdx 0, VarIdx 1])]
+> dPP ["qV_sing", "qNP", "qPP"] "VP" = [("qVP_sing", Node "VP" [VarIdx 0, VarIdx 1, VarIdx 2])]
+> dPP ["qV_pl", "qNP", "qPP"] "VP" = [("qVP_sing", Node "VP" [VarIdx 0, VarIdx 1, VarIdx 2])]
+> dPP ["qV_pl", "qNPWh", "qPP"] "VP" = [("qVPWh_pl", Node "VP" [VarIdx 0, VarIdx 2])]
+> dPP qs n = dSubjObj qs n
+
 The dog is on the mat.
 What is on the mat?
 What is the dog on?
 
 > test9In = tCP [tC' [tTP [tNP [tLf "the dog"], tT' [tT "is", tPP [tP "on", tNP [tLf "the mat"]]]]]]
 
-> test9Out = [tCP [tWhat, tC' [tC "is", tTP [tT' [tPP [tP "on", tNP [tLf "the mat"]]]]]],
->             tCP [tWhat, tC' [tC "is", tTP [tNP [tLf "the dog"], tT' [tPP [tP "on"]]]]]]
+> test9Out = [tCP [tWhat, tC' [tC "is", tTP [tNP [tLf "the dog"], tT' [tPP [tP "on"]]]]],
+>             tCP [tWhat, tC' [tC "is", tTP [tT' [tPP [tP "on", tNP [tLf "the mat"]]]]]]]
 
 The dogs are on the mats.
 What are the dogs on?
@@ -162,8 +193,8 @@ What are on the mat?
 
 > test10In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tT "are", tPP [tP "on", tNP [tLf "the mats"]]]]]]
 
-> test10Out = [tCP [tWhat, tC' [tC "are", tTP [tT' [tPP [tP "on", tNP [tLf "the mats"]]]]]],
->             tCP [tWhat, tC' [tC "are", tTP [tNP [tLf "the dogs"], tT' [tPP [tP "on"]]]]]]
+> test10Out = [tCP [tWhat, tC' [tC "are", tTP [tNP [tLf "the dogs"], tT' [tPP [tP "on"]]]]],
+>              tCP [tWhat, tC' [tC "are", tTP [tT' [tPP [tP "on", tNP [tLf "the mats"]]]]]]]
 
 The dogs sit on the mat.
 What sit on the mat?
@@ -176,8 +207,17 @@ What do the dogs sit on?
 
 The dog chases [the cat] [on the mat].
 What chases [the cat] [on the mat]?
-X What does the dog chase?
+X What does the dog chase on the mat?
 
 > test12In = tCP [tC' [tTP [tNP [tLf "the dog"], tT' [tVP [tV "chases", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]
 
 > test12Out = [tCP [tWhat, tC' [tTP [tT' [tVP [tV "chases", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]]
+
+The dogs chase [the cat] [on the mat].
+What chase [the cat] [on the mat]?
+What do the dogs chase on the mat?
+
+> test13In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]
+
+> test13Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tPP [tP "on", tNP [tLf "the mat"]]]]]]],
+>               tCP [tWhat, tC' [tTP [tT' [tVP [tV "chase", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]]
