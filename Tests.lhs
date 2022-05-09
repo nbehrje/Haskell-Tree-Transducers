@@ -176,6 +176,7 @@ What chase the cats?
 > dPP ["qV_sing", "qNP", "qPP"] "VP" = [("qVP_sing", Node "VP" [VarIdx 0, VarIdx 1, VarIdx 2])]
 > dPP ["qV_pl", "qNP", "qPP"] "VP" = [("qVP_sing", Node "VP" [VarIdx 0, VarIdx 1, VarIdx 2])]
 > dPP ["qV_pl", "qNPWh", "qPP"] "VP" = [("qVPWh_pl", Node "VP" [VarIdx 0, VarIdx 2])]
+> dPP ["qV_sing", "qNP", "qPPWh"] "VP" = [("qVPWh_sing", Node "VP" [VarIdx 0, VarIdx 1, VarIdx 2])]
 > dPP ["qV_pl", "qNP", "qPPWh"] "VP" = [("qVPWh_pl", Node "VP" [VarIdx 0, VarIdx 1, VarIdx 2])]
 > dPP qs n = dSubjObj qs n
 
@@ -224,3 +225,20 @@ What do the dogs chase the cat on?
 > test13Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tLf "the cat"], tPP [tP "on"]]]]]],
 >              tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tPP [tP "on", tNP [tLf "the mat"]]]]]]],
 >              tCP [tWhat, tC' [tTP [tT' [tVP [tV "chase", tNP [tLf "the cat"], tPP [tP "on", tNP [tLf "the mat"]]]]]]]]
+
+
+== Coordination == 
+
+The cat and the dog are big.
+What are big?
+
+> test14In = tCP [tC' [tTP [tNP [tNP [tLf "the cat"], tConj "and", tNP [tLf "the dog"]], tT' [tT "are", tADJ "big"]]]]
+
+> test14Out = [tCP [tWhat, tC' [tTP [tT' [tT "are", tADJ "big"]]]]]
+
+The dogs chase the cat and the bird.
+What do the dogs chase?
+
+> test15In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tNP [tLf "the cat"], tConj "and", tNP [tLf "the bird"]]]]]]]
+
+> test15Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase"]]]]]]
