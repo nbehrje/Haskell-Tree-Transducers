@@ -259,3 +259,24 @@ What chase the cat and the bird?
 
 > test15Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase"]]]]],
 >              tCP [tWhat, tC' [tTP [tT' [tVP [tV "chase", tNP [tNP [tLf "the cat"], tConj "and", tNP [tLf "the bird"]]]]]]]]
+
+
+== Embedded CP ==
+
+The birds think that the dogs chase the cats.
+What think that the dogs chase the cats?
+What do the birds think that the dogs chase?
+ 
+> test16In = tCP [tC' [tTP [tNP [tLf "the birds"], tT' [tVP [tV "think", tCP [tC' [tC "that", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tLf "the cats"]]]]]]]]]]]
+
+> test16Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the birds"], tT' [tVP [tV "think", tCP [tC "that", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase"]]]]]]]]],
+>              tCP [tWhat, tC' [tTP [tT' [tVP [tV "think", tCP [tC' [tC "that", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tLf "the cats"]]]]]]]]]]]]
+
+The fish think that the birds think that the dogs chase the cats.
+What think that the birds think that the dogs chase the cats?
+What do the fish think that the birds think that the dogs chase?
+
+> test17In = tCP [tC' [tTP [tNP [tLf "the fish"], tT' [tVP [tV "think", tCP [tC' [tC "that", tTP [tNP [tLf "the birds"], tT' [tVP [tV "think", tCP [tC' [tC "that", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tLf "the cats"]]]]]]]]]]]]]]]]
+
+> test17Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the fish"], tT' [tVP [tV "think", tCP [tC "that", tTP [tNP [tLf "the birds"], tT' [tVP [tV "think", tCP [tC "that", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase"]]]]]]]]]]]]],
+>              tCP [tWhat, tC' [tTP [tT' [tVP [tV "think", tCP [tC "that", tTP [tNP [tLf "the birds"], tT' [tVP [tV "think", tCP [tC' [tC "that", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tLf "the cats"]]]]]]]]]]]]]]]]
