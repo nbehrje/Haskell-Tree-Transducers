@@ -40,3 +40,4 @@
 > tWhat = Node "NP" [Node "what" []]
 > tPP children = Node "PP" children
 > tP word = Node "P" [Node word []]
+> tConj word = Node "CONJ" [Node word []]

@@ -229,16 +229,33 @@ What do the dogs chase the cat on?
 
 == Coordination == 
 
+> testCoord = runTests coordTT [(test14In,test14Out),(test15In,test15Out)]
+
+> coordTT = TT {
+>         states = ["qNP", "qWP"]
+>       , sigma = ["the dog"]
+>       , finals = ["qCPWh"]
+>       , delta = dCoord
+> }
+
+> dCoord [] "the bird" = [("qNoun", Node "the bird" []), ("qWhat", Node "what" [])]
+> dCoord [] "and" = [("qConj", Node "and" [])]
+> dCoord ["qConj"] "CONJ" = [("qCONJ", Node "CONJ" [VarIdx 0])]
+> dCoord ["qNP", "qCONJ", "qNP"] "NP" = [("qNP", Node "NP" [VarIdx 0, VarIdx 1, VarIdx 2]), ("qNPWh", tWhat)]
+> dCoord qs n = dPP qs n
+
 The cat and the dog are big.
 What are big?
 
 > test14In = tCP [tC' [tTP [tNP [tNP [tLf "the cat"], tConj "and", tNP [tLf "the dog"]], tT' [tT "are", tADJ "big"]]]]
 
-> test14Out = [tCP [tWhat, tC' [tTP [tT' [tT "are", tADJ "big"]]]]]
+> test14Out = [tCP [tWhat, tC' [tC "are", tTP [tT' [tADJ "big"]]]]]
 
 The dogs chase the cat and the bird.
 What do the dogs chase?
+What chase the cat and the bird?
 
 > test15In = tCP [tC' [tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase", tNP [tNP [tLf "the cat"], tConj "and", tNP [tLf "the bird"]]]]]]]
 
-> test15Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase"]]]]]]
+> test15Out = [tCP [tWhat, tC' [tC "do", tTP [tNP [tLf "the dogs"], tT' [tVP [tV "chase"]]]]],
+>              tCP [tWhat, tC' [tTP [tT' [tVP [tV "chase", tNP [tNP [tLf "the cat"], tConj "and", tNP [tLf "the bird"]]]]]]]]
