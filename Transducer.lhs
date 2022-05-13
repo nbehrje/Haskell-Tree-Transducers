@@ -16,7 +16,7 @@
 > process :: Show q => Show b => Eq b => Eq q => BFTT q b -> Tree b -> [(q, Tree b)]
 > process tt (Node n []) =  output
 >                             where d = delta tt
->                                   output = map (\(state, tree) -> (state, tree)) (d [] n) 
+>                                   output = (d [] n) 
 > process tt (Node n ts) =  outputs
 >                             where d = delta tt
 >                                   childrenProd = (cartProd (map (process tt) ts))
