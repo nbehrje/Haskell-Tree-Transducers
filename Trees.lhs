@@ -36,7 +36,7 @@
 > tVP children = Node "VP" children
 > tV word = Node "V" [Node word []]
 > tADJ word = Node "ADJ" [Node word []]
-> tLf word = Node word []
+> tN word = Node word []
 > tWhat = Node "NP" [Node "what" []]
 > tPP children = Node "PP" children
 > tP word = Node "P" [Node word []]

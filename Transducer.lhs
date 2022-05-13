@@ -20,6 +20,11 @@
 > process tt (Node n ts) =  outputs
 >                             where d = delta tt
 >                                   childrenProd = (cartProd (map (process tt) ts))
->                                   outputs = (map (\((rootState,rootTree), children) -> (rootState, fillVars rootTree children)) (filter (\((rootState,rootTree), children) -> rootTree /= VarIdx (-1)) ((concatMap (\children -> (map (\rootOut -> (rootOut, (map snd) children))) (d ((map fst) children) n))) childrenProd)))
+>                                   rootChildrenPairs = concatMap (\children -> (map (\rootOut -> (rootOut, (map snd) children))) (d ((map fst) children) n)) childrenProd
+>                                   validRootChildrenPairs = filter (\((rootState,rootTree), children) -> rootTree /= VarIdx (-1)) rootChildrenPairs
+>                                   outputs = map (\((rootState,rootTree), children) -> (rootState, fillVars rootTree children)) validRootChildrenPairs
+> process _ _ = []
 
+> transduce :: (Show a, Show b, Eq b, Eq a) => BFTT a b -> Tree b -> [Tree b]
 > transduce tt (Node n ts) = map snd (process tt (Node n ts))
+> transduce _ _ = []
