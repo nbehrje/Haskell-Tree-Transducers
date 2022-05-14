@@ -39,7 +39,7 @@ example1TT = TT {
 
  delta1 [] "a" = [("qA", Node "a" [])]
  delta1 [] "b" = [("qB", Node "b" [])]
- delta1 ["qA", "qS", "qB"] "S" = [("qS", Node "S" [VarIdx 1, VarIdx 0])]
+ delta1 ["qA", "qS", "qB"] "S" = [("qS", Node "S" [VarIdx 2, VarIdx 1, VarIdx 0])]
  delta1 ["qA", "qB"] "S" = [("qS", Node "S" [VarIdx 1, VarIdx 0])]
 ```
 
