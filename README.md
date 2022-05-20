@@ -6,7 +6,7 @@ This project is an implementation of a nondeterministic finite state bottom-up t
 
 ### Trees.lhs
 
-This file contains the definition of the Tree data type used for storing parse tree and some functions used to transduce those trees. It also includes some constructors for trees to conserve space.
+This file contains the definition of the Tree data type used for storing parse trees and some functions used to transduce those trees. It also includes some constructors for trees to conserve space.
 
 ### Transducer.lhs
 
