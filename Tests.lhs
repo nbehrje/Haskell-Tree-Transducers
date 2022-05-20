@@ -63,7 +63,7 @@ What is big?
 The dogs are big.
 What are big?
 
-> test2In = tCP [tC' [tTP [tNP [tN "the dog"], tT' [tT "are", tADJ "big"]]]]
+> test2In = tCP [tC' [tTP [tNP [tN "the dogs"], tT' [tT "are", tADJ "big"]]]]
 > test2Out = [tCP [tWhat, tC' [tC "are", tTP [tT' [tADJ "big"]]]]]
 
 I am big.
