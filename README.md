@@ -1,4 +1,3 @@
-# Lin-637-Final
 
 This project is an implementation of a nondeterministic finite state bottom-up tree transducer in Haskell. Included are examples that model the construction of what-questions from declarative sentences and the wh-movement therein.
 
